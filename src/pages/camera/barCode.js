@@ -47,6 +47,9 @@ class ItemBarcodeScanContainer extends React.Component {
       placement: 'top',
       duration: 2000,
       isClosable: false,
+      style: {
+        width: 140,
+      },
     });
     this.navigation.goBack();
   };

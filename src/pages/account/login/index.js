@@ -17,10 +17,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const LOGO_URL = '../../../public/image/logo.jpg';
 import {ToastContext} from '../../../index';
 import {postLogin} from '../../../service/index';
-
+import {useToast} from 'native-base';
 const Login = props => {
   const {navigation} = props;
-  const toast = useContext(ToastContext);
+  // const toast = useContext(ToastContext);
+  const toast = useToast();
   const [keyboardShow, setkeyboardShow] = useState(false);
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
@@ -93,10 +94,14 @@ const Login = props => {
                 if (!username || !password) {
                   toast.show({
                     title: '用户名或密码不能为空',
+                    description: '',
                     status: 'error',
                     placement: 'top',
                     duration: 1500,
                     isClosable: false,
+                    style: {
+                      width: 250,
+                    },
                   });
                   return;
                 }
@@ -110,6 +115,9 @@ const Login = props => {
                     placement: 'top',
                     duration: 1500,
                     isClosable: false,
+                    style: {
+                      width: 220,
+                    },
                   });
                   return;
                 }
@@ -120,7 +128,11 @@ const Login = props => {
                     placement: 'top',
                     duration: 1500,
                     isClosable: false,
+                    style: {
+                      width: 250,
+                    },
                   });
+
                   return;
                 }
                 toast.show({
@@ -129,6 +141,9 @@ const Login = props => {
                   placement: 'top',
                   duration: 2000,
                   isClosable: false,
+                  style: {
+                    width: 140,
+                  },
                 });
                 const {token, data} = loginRes;
                 const {name, worker} = data;
@@ -161,6 +176,9 @@ const Login = props => {
                   placement: 'top',
                   duration: 1000,
                   isClosable: false,
+                  style: {
+                    width: 180,
+                  },
                 });
               }}>
               <Text style={styles.bottomText}>忘记密码</Text>

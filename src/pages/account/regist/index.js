@@ -101,6 +101,9 @@ const Regist = props => {
                     placement: 'top',
                     duration: 2000,
                     isClosable: false,
+                    style: {
+                      width: 230,
+                    },
                   });
                   return;
                 }
@@ -119,6 +122,9 @@ const Regist = props => {
                     placement: 'top',
                     duration: 2000,
                     isClosable: false,
+                    style: {
+                      width: 140,
+                    },
                   });
                   const loginRes = await postLogin({username, password});
                   const {token} = loginRes;
@@ -136,6 +142,9 @@ const Regist = props => {
                     placement: 'top',
                     duration: 2000,
                     isClosable: false,
+                    style: {
+                      width: 180,
+                    },
                   });
                   return;
                 }
@@ -145,6 +154,9 @@ const Regist = props => {
                   placement: 'top',
                   duration: 2000,
                   isClosable: false,
+                  style: {
+                    width: 260,
+                  },
                 });
               }}>
               <Text style={{color: 'white'}}>注册</Text>

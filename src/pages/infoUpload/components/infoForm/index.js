@@ -122,6 +122,9 @@ export default function InfoForm(props) {
                       placement: 'top',
                       duration: 1500,
                       isClosable: false,
+                      style: {
+                        width: 180,
+                      },
                     });
                     return;
                   }
@@ -132,6 +135,9 @@ export default function InfoForm(props) {
                       placement: 'top',
                       duration: 1500,
                       isClosable: false,
+                      style: {
+                        width: 180,
+                      },
                     });
                     return;
                   }
@@ -156,6 +162,9 @@ export default function InfoForm(props) {
                       status: 'warning',
                       placement: 'top',
                       isClosable: false,
+                      style: {
+                        width: 280,
+                      },
                     });
                     navigation.navigate('Login');
                   }

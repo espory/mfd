@@ -22,7 +22,7 @@ export default function GetGeolocation(props) {
   const {title} = props;
   return (
     <View>
-      <Text style={styles.title}>{title}</Text>
+      {/* <Text style={styles.title}>{title}</Text>
       <View style={styles.TextView}>
         <TextArea
           aria-label="t1"
@@ -30,7 +30,7 @@ export default function GetGeolocation(props) {
           placeholder="输入需补充的信息"
           style={styles.infoText}
         />
-      </View>
+      </View> */}
     </View>
   );
 }

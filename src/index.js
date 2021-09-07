@@ -40,6 +40,7 @@ function InitScreen({navigation}) {
 }
 
 const Stack = createStackNavigator();
+
 export const ToastContext = createContext();
 function Nav() {
   const toast = useToast();

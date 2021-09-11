@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  ScrollView,
   TouchableWithoutFeedback,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -56,163 +57,161 @@ export default function InfoForm(props) {
   };
   return (
     <>
-      <>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}>
-            <View style={styles.form}>
-              <GetDevicePhoto
-                title={'设备照片上传'}
-                onOpen={onOpen}
-                setShowModal={setShowModal}
-                deviceInImgUrl={deviceInImgUrl}
-                deviceOutImgUrl={deviceOutImgUrl}
-                setpickInImg={() => {
-                  setpickImgType(pickType.InDevice);
-                }}
-                setpickOutImg={() => {
-                  setpickImgType(pickType.OutDevice);
-                }}
-              />
-              <GetDeviceCode
-                title={'设备编码上传'}
-                onOpen={onOpen}
-                deviceCode={deviceCode}
-                setCodeText={text => {
-                  setdeviceCode({...deviceCode, value: text});
-                }}
-                setpickCodeImg={() => {
-                  setpickImgType(pickType.BarCode);
-                }}
-                initCodeType={() => {
-                  setdeviceCode({
-                    type: deviceCodeType.ShowIcon,
-                    value: '',
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}>
+        <ScrollView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}>
+          <View style={styles.form}>
+            <GetDevicePhoto
+              title={'设备照片上传'}
+              onOpen={onOpen}
+              setShowModal={setShowModal}
+              deviceInImgUrl={deviceInImgUrl}
+              deviceOutImgUrl={deviceOutImgUrl}
+              setpickInImg={() => {
+                setpickImgType(pickType.InDevice);
+              }}
+              setpickOutImg={() => {
+                setpickImgType(pickType.OutDevice);
+              }}
+            />
+            <GetDeviceCode
+              title={'设备编码上传'}
+              onOpen={onOpen}
+              deviceCode={deviceCode}
+              setCodeText={text => {
+                setdeviceCode({...deviceCode, value: text});
+              }}
+              setpickCodeImg={() => {
+                setpickImgType(pickType.BarCode);
+              }}
+              initCodeType={() => {
+                setdeviceCode({
+                  type: deviceCodeType.ShowIcon,
+                  value: '',
+                });
+              }}
+            />
+            <GetGeolocation title={'地理位置'} toast={toast} />
+            <InfoComplete
+              title={'补充信息'}
+              textAreaValue={textAreaValue}
+              setTextAreaValue={text => {
+                setTextAreaValue(text);
+              }}
+            />
+          </View>
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+              style={styles.secondaryButton}
+              onPressIn={() => {
+                navigation.navigate('Home');
+              }}>
+              <Text style={{color: '#88afd5'}}>返回</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.mainButton}
+              onPressIn={async () => {
+                if (!deviceInImgUrl || !deviceOutImgUrl) {
+                  toast.show({
+                    title: '设备照片为空',
+                    status: 'warning',
+                    placement: 'top',
+                    duration: 1500,
+                    isClosable: false,
+                    style: {
+                      width: 180,
+                    },
                   });
-                }}
-              />
-              <GetGeolocation title={'地理位置'} />
-              <InfoComplete
-                title={'补充信息'}
-                textAreaValue={textAreaValue}
-                setTextAreaValue={text => {
-                  setTextAreaValue(text);
-                }}
-              />
-            </View>
-            <View style={styles.buttonView}>
-              <TouchableOpacity
-                style={styles.secondaryButton}
-                onPressIn={() => {
-                  navigation.navigate('Home');
-                }}>
-                <Text style={{color: '#88afd5'}}>返回</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.mainButton}
-                onPressIn={async () => {
-                  if (!deviceInImgUrl || !deviceOutImgUrl) {
-                    toast.show({
-                      title: '设备照片为空',
-                      status: 'warning',
-                      placement: 'top',
-                      duration: 1500,
-                      isClosable: false,
-                      style: {
-                        width: 180,
-                      },
-                    });
-                    return;
-                  }
-                  if (!deviceCode.value) {
-                    toast.show({
-                      title: '设备编码为空',
-                      status: 'warning',
-                      placement: 'top',
-                      duration: 1500,
-                      isClosable: false,
-                      style: {
-                        width: 180,
-                      },
-                    });
-                    return;
-                  }
-                  const token = await AsyncStorage.getItem('token');
-                  // const worker = await AsyncStorage.getItem('worker');
-                  const username = await AsyncStorage.getItem('username');
+                  return;
+                }
+                if (!deviceCode.value) {
+                  toast.show({
+                    title: '设备编码为空',
+                    status: 'warning',
+                    placement: 'top',
+                    duration: 1500,
+                    isClosable: false,
+                    style: {
+                      width: 180,
+                    },
+                  });
+                  return;
+                }
+                const token = await AsyncStorage.getItem('token');
+                // const worker = await AsyncStorage.getItem('worker');
+                const username = await AsyncStorage.getItem('username');
 
-                  const res = await postSubmit({
-                    // worker,
-                    elecid: deviceCode.value,
-                    information: textAreaValue,
-                    token,
-                    username,
-                    file1: deviceInImgUrl,
-                    file2: deviceOutImgUrl,
+                const res = await postSubmit({
+                  // worker,
+                  elecid: deviceCode.value,
+                  information: textAreaValue,
+                  token,
+                  username,
+                  file1: deviceInImgUrl,
+                  file2: deviceOutImgUrl,
+                });
+                //token无效
+                if (res.code === 101) {
+                  await AsyncStorage.removeItem('token');
+                  toast.show({
+                    title: '用户信息已过期，请重新登录',
+                    status: 'warning',
+                    placement: 'top',
+                    isClosable: false,
+                    style: {
+                      width: 340,
+                    },
                   });
-                  //token无效
-                  if (res.code === 101) {
-                    await AsyncStorage.removeItem('token');
-                    toast.show({
-                      title: '用户信息已过期，请重新登录',
-                      status: 'warning',
-                      placement: 'top',
-                      isClosable: false,
-                      style: {
-                        width: 280,
-                      },
-                    });
-                    navigation.navigate('Login');
-                  }
-                  if (res.code === 200) {
-                    // const pgname =
-                    //   Math.floor(Math.random() * 2) === 0
-                    //     ? PAGE_MAP.RESULT_ERROR
-                    //     : PAGE_MAP.RESULT_SUCCESS;
-                    setpage(PAGE_MAP.RESULT_SUCCESS);
-                  }
-                  // if (res.code === 200 && res.msg === '安装成功') {
-                  //   setpage(PAGE_MAP.RESULT_SUCCESS);
-                  //   return;
-                  // }
-                  // if (res.code === 200 && res.msg === '安装失败') {
-                  //   setpage(PAGE_MAP.RESULT_ERROR);
-                  //   return;
-                  // }
-                  // toast.show({
-                  //   title: '登录成功',
-                  //   status: 'success',
-                  //   placement: 'top',
-                  //   isClosable: false,
-                  // });
+                  navigation.navigate('Login');
+                }
+                if (res.code === 200) {
                   // const pgname =
                   //   Math.floor(Math.random() * 2) === 0
                   //     ? PAGE_MAP.RESULT_ERROR
                   //     : PAGE_MAP.RESULT_SUCCESS;
-                  // setpage(pgname);
-                }}>
-                <Text style={{color: 'white'}}>提交</Text>
-              </TouchableOpacity>
-            </View>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
+                  setpage(PAGE_MAP.RESULT_SUCCESS);
+                }
+                // if (res.code === 200 && res.msg === '安装成功') {
+                //   setpage(PAGE_MAP.RESULT_SUCCESS);
+                //   return;
+                // }
+                // if (res.code === 200 && res.msg === '安装失败') {
+                //   setpage(PAGE_MAP.RESULT_ERROR);
+                //   return;
+                // }
+                // toast.show({
+                //   title: '登录成功',
+                //   status: 'success',
+                //   placement: 'top',
+                //   isClosable: false,
+                // });
+                // const pgname =
+                //   Math.floor(Math.random() * 2) === 0
+                //     ? PAGE_MAP.RESULT_ERROR
+                //     : PAGE_MAP.RESULT_SUCCESS;
+                // setpage(pgname);
+              }}>
+              <Text style={{color: 'white'}}>提交</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
 
-        <ShowAction
-          isOpen={isOpen}
-          onClose={onClose}
-          pickImgType={pickImgType}
-          launchImageLibrary={launchImageLibrary}
-          setImage={setImage}
-          setdeviceCode={setdeviceCode}
-          navigation={navigation}
-          toast={toast}
-        />
-        <ShowHelp showModal={showModal} setShowModal={setShowModal} />
-      </>
+      <ShowAction
+        isOpen={isOpen}
+        onClose={onClose}
+        pickImgType={pickImgType}
+        launchImageLibrary={launchImageLibrary}
+        setImage={setImage}
+        setdeviceCode={setdeviceCode}
+        navigation={navigation}
+        toast={toast}
+      />
+      <ShowHelp showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 }
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonView: {
-    marginTop: 100,
+    marginTop: 50,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',

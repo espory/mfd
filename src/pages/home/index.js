@@ -28,7 +28,7 @@ const Home = props => {
                 navigation.navigate('InfoUpload');
               }}>
               <Icon name="camera" size={40} color="white" />
-              <Text style={{color: 'white'}}>信息上传</Text>
+              <Text style={{color: 'white'}}>拍照上传</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.bottomMenu}>

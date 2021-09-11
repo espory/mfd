@@ -17,11 +17,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const LOGO_URL = '../../../public/image/logo.jpg';
 import {ToastContext} from '../../../index';
 import {postLogin} from '../../../service/index';
-import {useToast} from 'native-base';
 const Login = props => {
   const {navigation} = props;
-  // const toast = useContext(ToastContext);
-  const toast = useToast();
+  const toast = useContext(ToastContext);
   const [keyboardShow, setkeyboardShow] = useState(false);
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
@@ -105,8 +103,8 @@ const Login = props => {
                   });
                   return;
                 }
-
                 const loginRes = await postLogin({username, password});
+                console.log(loginRes);
                 const {code = 400} = loginRes;
                 if (code === 205) {
                   toast.show({

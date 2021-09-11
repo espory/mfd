@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const HOST = 'http://101.34.6.145:8080';
+export const HOST = 'http://81.69.173.188:8080';
 
 axios.interceptors.response.use(null, error => {
   return Promise.reject(error.response);

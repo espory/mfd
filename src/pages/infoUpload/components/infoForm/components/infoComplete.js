@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {TextArea} from 'native-base';
+import {TextArea, KeyboardAvoidingView} from 'native-base';
 
 export default function InfoComplete(props) {
   const {title} = props;
@@ -8,7 +8,7 @@ export default function InfoComplete(props) {
   return (
     <View>
       <Text style={styles.title}>{title}</Text>
-      <View style={styles.TextView}>
+      <KeyboardAvoidingView style={styles.TextView}>
         <TextArea
           aria-label="t1"
           numberOfLines={4}
@@ -17,7 +17,7 @@ export default function InfoComplete(props) {
           value={textAreaValue}
           onChangeText={setTextAreaValue}
         />
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }

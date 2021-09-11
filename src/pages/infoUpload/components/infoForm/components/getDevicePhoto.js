@@ -29,13 +29,27 @@ export default function getDevicePhoto(props) {
         <TouchableOpacity
           style={{
             padding: 7,
-            paddingTop: 21,
-            paddingBottom: 0,
+            paddingTop: 20,
+            paddingBottom: 0
+            // backgroundColor: 'red',
           }}
           onPressIn={() => {
             setShowModal(true);
           }}>
-          <EntypoIcon name="help-with-circle" size={16} color="#F6A726" />
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <Text
+              style={{
+                fontSize: 14,
+                paddingRight: 3,
+                color: '#F8B200',
+              }}>
+              点击查看帮助
+            </Text>
+            <EntypoIcon name="help-with-circle" size={16} color="#F6A726" />
+          </View>
         </TouchableOpacity>
       </View>
       <View

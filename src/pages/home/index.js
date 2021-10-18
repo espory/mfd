@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const LOGO_URL = require('../../public/image/logo.jpg');
+const LOGO_URL = require('../../public/image/logo.png');
 const BG_IMG = require('../../public/image/bg.jpg');
 const Home = props => {
   const {navigation} = props;
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   logoImg: {
     width: 90,
     height: 90,
-    borderRadius: 20,
+    borderRadius: 100,
   },
   appName: {
     color: '#242424',

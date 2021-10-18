@@ -4,11 +4,12 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  KeyboardAvoidingView,
+  ActivityIndicator,
   Platform,
   Keyboard,
   ScrollView,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useDisclose} from 'native-base';
@@ -33,8 +34,8 @@ export const deviceCodeType = {
 };
 export default function InfoForm(props) {
   const {setpage, PAGE_MAP, navigation, toast} = props;
-  const [deviceInImgUrl, setdeviceInImgUrl] = useState(null);
-  const [deviceOutImgUrl, setdeviceOutImgUrl] = useState(null);
+  const [deviceInImgUrl, setdeviceInImgUrl] = useState({});
+  const [deviceOutImgUrl, setdeviceOutImgUrl] = useState({});
   const [deviceCode, setdeviceCode] = useState({
     type: deviceCodeType.ShowIcon,
     value: '',
@@ -43,34 +44,61 @@ export default function InfoForm(props) {
   const [pickImgType, setpickImgType] = useState(null); // getDevicePhoto or getDeviceCode
   const {isOpen, onOpen, onClose} = useDisclose();
   const [showModal, setShowModal] = useState(false);
+  const [loading, setloading] = useState(false);
   useEffect(() => {
     return () => {};
   }, []);
 
   const setImage = {
-    InDevice: url => {
-      setdeviceInImgUrl(url);
+    InDevice: obj => {
+      setdeviceInImgUrl(obj);
     },
-    OutDevice: url => {
-      setdeviceOutImgUrl(url);
+    OutDevice: obj => {
+      setdeviceOutImgUrl(obj);
     },
   };
+
   return (
     <>
+      {loading && (
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            top: Dimensions.get('window').height * 0.5 - 75,
+            flex: 1,
+            zIndex: 9999,
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontWeight: 'bold',
+              color: '#B5B6B3',
+              fontSize: 20,
+            }}>
+            正在上传,请稍后...
+          </Text>
+          <ActivityIndicator size={150} color="#B5B6B3" />
+        </View>
+      )}
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
         }}>
         <ScrollView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}>
+          style={{
+            ...styles.container,
+            backgroundColor: loading ? '#FFFFFF' : 'white',
+          }}>
           <View style={styles.form}>
             <GetDevicePhoto
               title={'设备照片上传'}
               onOpen={onOpen}
               setShowModal={setShowModal}
-              deviceInImgUrl={deviceInImgUrl}
-              deviceOutImgUrl={deviceOutImgUrl}
+              deviceInImgUrl={deviceInImgUrl?.url}
+              deviceOutImgUrl={deviceOutImgUrl?.url}
               setpickInImg={() => {
                 setpickImgType(pickType.InDevice);
               }}
@@ -141,6 +169,7 @@ export default function InfoForm(props) {
                   });
                   return;
                 }
+                setloading(true);
                 const token = await AsyncStorage.getItem('token');
                 // const worker = await AsyncStorage.getItem('worker');
                 const username = await AsyncStorage.getItem('username');
@@ -151,9 +180,10 @@ export default function InfoForm(props) {
                   information: textAreaValue,
                   token,
                   username,
-                  file1: deviceInImgUrl,
-                  file2: deviceOutImgUrl,
+                  file1: deviceInImgUrl.upload_url,
+                  file2: deviceOutImgUrl.upload_url,
                 });
+                setloading(false);
                 //token无效
                 if (res.code === 101) {
                   await AsyncStorage.removeItem('token');
@@ -210,6 +240,7 @@ export default function InfoForm(props) {
         setdeviceCode={setdeviceCode}
         navigation={navigation}
         toast={toast}
+        setloading={setloading}
       />
       <ShowHelp showModal={showModal} setShowModal={setShowModal} />
     </>
@@ -220,7 +251,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 30,
-    paddingTop: 50,
   },
   bg: {
     position: 'absolute',
@@ -239,6 +269,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     marginTop: 50,
+    marginBottom: 100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',

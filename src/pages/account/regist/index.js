@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from 'react-native';
-const LOGO_URL = '../../../public/image/logo.jpg';
+const LOGO_URL = '../../../public/image/logo.png';
 import {ToastContext} from '../../../index';
 import {postRegiste, postLogin} from '../../../service/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   logoImg: {
     width: 50,
     height: 50,
-    borderRadius: 10,
+    borderRadius: 100,
   },
   inputView: {
     height: '40%',

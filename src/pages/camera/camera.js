@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,15 +19,32 @@ LogBox.ignoreLogs([
 
 function MCamera(props) {
   const {navigation, route} = props;
-  const {mention, setdeviceImgUrl} = route.params;
+  const {mention, setdeviceImgUrl, isCorrectImg, toast} = route.params;
   const [camera, setcamera] = useState(null);
-
+  const [loading, setloading] = useState(false);
   const takePicture = async () => {
     if (camera) {
       const options = {quality: 0.3};
+      setloading(true);
       const data = await camera.takePictureAsync(options);
-      await setdeviceImgUrl(data.uri);
-      navigation.goBack();
+      const res = await isCorrectImg(data.uri);
+      setloading(false);
+      console.log(res);
+      if (res.code === 201) {
+        await setdeviceImgUrl({url: data.uri, upload_url: res.data});
+        navigation.goBack();
+      } else {
+        toast.show({
+          title: '照片拍摄不合规，请重新拍摄',
+          status: 'error',
+          placement: 'top',
+          duration: 3000,
+          isClosable: false,
+          style: {
+            width: 240,
+          },
+        });
+      }
     }
   };
   return (
@@ -72,7 +90,19 @@ function MCamera(props) {
             <Ionicons name="arrow-back-sharp" size={50} color="white" />
           </TouchableOpacity>
         </View>
-
+        {loading && (
+          <View
+            style={{
+              position: 'absolute',
+              top: Dimensions.get('window').height * 0.5 - 75,
+              width: '100%',
+              flex: 1,
+              zIndex: 9999,
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator size={150} color="#B5B6B3" />
+          </View>
+        )}
         <View
           style={{
             opacity: 0.6,
@@ -82,12 +112,12 @@ function MCamera(props) {
           }}>
           <Text
             style={{
-              color: 'white',
+              color: loading ? '#F3A016' : 'white',
               paddingTop: 40,
               fontSize: 18,
               fontWeight: 'bold',
             }}>
-            {mention}
+            {loading ? '正在上传图片,请等待...' : mention}
           </Text>
           <Icon
             name="scan-helper"

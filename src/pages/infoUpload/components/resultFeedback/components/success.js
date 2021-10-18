@@ -7,13 +7,15 @@ export function Success(props) {
     <View style={{flex: 1}}>
       <View style={styles.headerView}>
         <Icon name="check-circle" size={70} color="#70c67d" />
-        <Text style={styles.mentionText}>电表完好，接线合规</Text>
+        {/* <Text style={styles.mentionText}>电表完好，接线合规</Text> */}
+        <Text style={styles.mentionText}>上传成功</Text>
       </View>
       <View style={styles.buttonView}>
         <TouchableOpacity
           style={styles.secondaryButton}
           title="登录"
           onPressIn={() => {
+            alert('功能待完善');
             // toast.show({
             //   title: '登录成功',
             //   status: 'success',

@@ -12,7 +12,7 @@ import {
   Button,
   Keyboard,
 } from 'react-native';
-const LOGO_URL = require('../../public/image/logo.jpg');
+const LOGO_URL = require('../../public/image/logo.png');
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const navgateStrategy = {};
@@ -22,7 +22,7 @@ function MenuItem(props) {
   return (
     <TouchableOpacity
       onPress={() => {
-        alert('123');
+        alert('功能待完善');
       }}>
       <View style={styles.menuItem}>
         <View style={{width: 20, alignItems: 'center'}}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 70,
     height: 70,
-    borderRadius: 16,
+    borderRadius: 100,
     position: 'absolute',
     bottom: -50,
     left: 40,

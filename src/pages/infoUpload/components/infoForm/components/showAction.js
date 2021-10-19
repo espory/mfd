@@ -44,6 +44,9 @@ function ShowAction(props) {
         onClick: () => {
           onClose();
           launchImageLibrary({}, async res => {
+            if (!res.assets) {
+              return;
+            }
             setloading(true);
             const uri = res?.assets?.length && res.assets[0].uri;
             const rs = await isCorrectImg(1)(uri);
@@ -92,6 +95,10 @@ function ShowAction(props) {
         onClick: () => {
           onClose();
           launchImageLibrary({}, async res => {
+            if (!res.assets) {
+              return;
+            }
+            console.log(res);
             setloading(true);
             const uri = res?.assets?.length && res.assets[0].uri;
             const rs = await isCorrectImg(1)(uri);

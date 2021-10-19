@@ -5,7 +5,7 @@ import {RNCamera} from 'react-native-camera';
 import BarcodeMask from 'react-native-barcode-mask';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import MaterIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import _ from 'lodash';
 const styles = {
   root: {
     flex: 1,
@@ -38,21 +38,18 @@ class ItemBarcodeScanContainer extends React.Component {
     this.HEIGHT = Dimensions.get('window').height;
   }
 
-  onBarCodeRead = scanResult => {
-    // scanResult.data will contain your scanned data
-    this.setdeviceCode(scanResult.data);
-    this.toast.show({
-      title: '识别成功',
-      status: 'success',
-      placement: 'top',
-      duration: 2000,
-      isClosable: false,
-      style: {
-        width: 140,
-      },
-    });
-    this.navigation.goBack();
-  };
+  onBarCodeRead = _.debounce(
+    scanResult => {
+      // scanResult.data will contain your scanned data
+      this.setdeviceCode(scanResult.data);
+      this.navigation.goBack();
+    },
+    500,
+    {
+      leading: true,
+      trailing: false,
+    },
+  );
 
   render() {
     return (

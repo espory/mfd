@@ -118,7 +118,7 @@ function ShowAction(props) {
     },
     [pickType.BarCode]: {
       item1: {
-        itemTitle: '拍照获取',
+        itemTitle: '扫描二维码获取',
         itemIcon: <Icon name="camera" size={30} color="black" />,
         onClick: () => {
           // setshowCamera(true);

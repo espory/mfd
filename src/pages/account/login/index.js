@@ -203,9 +203,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoImg: {
-    width: 50,
+    width: 54,
     height: 50,
-    borderRadius: 100,
+    borderRadius: 0,
   },
   inputView: {
     height: '40%',

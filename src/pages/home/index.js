@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   logoImg: {
-    width: 90,
-    height: 90,
-    borderRadius: 100,
+    width: 108,
+    height: 100,
+    borderRadius: 0,
   },
   appName: {
     color: '#242424',

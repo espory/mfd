@@ -51,6 +51,29 @@ export default props => {
   }, []);
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: 70,
+          top: 30,
+          left: 20,
+        }}
+        onPressIn={() => {
+          console.log(navigation);
+          navigation.navigate('Home');
+        }}>
+        <Icon name="chevron-left" size={18} color="gray" />
+        <Text
+          style={{
+            color: 'gray',
+            fontWeight: 'bold',
+            fontSize: 15,
+            paddingLeft: 8,
+          }}>
+          返回
+        </Text>
+      </TouchableOpacity>
       <View style={styles.topView}>
         <Image style={styles.logo} source={LOGO_URL} />
       </View>

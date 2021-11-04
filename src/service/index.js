@@ -27,7 +27,19 @@ export function postRegiste({username, password, name, worker}) {
     data: data,
   });
 }
+const getDate = () => {
+  var date = new Date();
+  var year = date.getFullYear().toString();
+  var month = (date.getMonth() + 1).toString();
+  var day = date.getDate().toString();
+  var hour = date.getHours().toString();
+  var minute = date.getMinutes().toString();
+  var seconds = date.getSeconds().toString();
 
+  return (
+    year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + seconds
+  );
+};
 export function postSubmit({
   elecid,
   // worker,
@@ -36,7 +48,7 @@ export function postSubmit({
   file1,
   file2,
   pointest = '50',
-  time = new Date().toISOString().split('.')[0].replace('T', ' '),
+  time = getDate(),
   donewell = '0',
   information,
   token,
@@ -89,5 +101,26 @@ export function postJudgePicture(file, username, pic_type) {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+  });
+}
+
+export function postEidSearch(eid) {
+  const data = {
+    ElecID: eid,
+  };
+  return fetch({
+    url: '/eidsearch/eidsearch',
+    method: 'post',
+    params: data,
+  });
+}
+export function postUidSearch(uid) {
+  const data = {
+    UserID: uid,
+  };
+  return fetch({
+    url: '/uidsearch/uidsearch',
+    method: 'post',
+    params: data,
   });
 }

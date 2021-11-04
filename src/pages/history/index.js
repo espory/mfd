@@ -1,133 +1,92 @@
-import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from 'react-native';
-import {RNCamera} from 'react-native-camera';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {VStack, Center, Heading, ScrollView} from 'native-base';
+import {postUidSearch} from '../../service/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-function MCamera(props) {
-  const {navigation, route} = props;
-  const {mention, setdeviceImgUrl} = route.params;
-  const [camera, setcamera] = useState(null);
+export default function History(props) {
+  const {navigation} = props;
+  const [history, sethistory] = useState([]);
+  useEffect(() => {
+    AsyncStorage.getItem('username').then(async username => {
+      const res = await postUidSearch(username);
+      if (res.code === 205) {
+        sethistory([]);
+        return;
+      }
+      sethistory(res?.data || []);
+      // postUidSearch
+    });
 
-  const takePicture = async () => {
-    if (camera) {
-      const options = {quality: 0.3};
-      const data = await camera.takePictureAsync(options);
-      await setdeviceImgUrl(data.uri);
-      navigation.goBack();
-    }
-  };
+    return () => {};
+  }, []);
   return (
-    <View style={styles.container}>
-      <RNCamera
-        ref={ref => {
-          setcamera(ref);
-        }}
-        captureAudio={false}
-        style={styles.preview}
-        type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.auto}
-        androidCameraPermissionOptions={{
-          title: '相机使用权限',
-          message: '需要您的许可去使用相机',
-          buttonPositive: '同意',
-          buttonNegative: '拒绝',
-        }}
-        // androidRecordAudioPermissionOptions={{
-        //   title: 'Permission to use audio recording',
-        //   message: 'We need your permission to use your audio',
-        //   buttonPositive: 'Ok',
-        //   buttonNegative: 'Cancel',
-        // }}
-        // onGoogleVisionBarcodesDetected={({barcodes}) => {
-        //   console.log(barcodes);
-        // }}
-      >
-        <View
+    <>
+      <ScrollView>
+        <TouchableOpacity
           style={{
-            width: '100%',
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-            style={{
-              paddingTop: 10,
-              paddingLeft: 20,
-              alignSelf: 'flex-start',
-              justifyContent: 'flex-start',
-            }}>
-            <Ionicons name="arrow-back-sharp" size={50} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            opacity: 0.6,
-            height: '55%',
-            justifyContent: 'space-between',
+            flexDirection: 'row',
             alignItems: 'center',
+            width: 70,
+            top: 30,
+            left: 20,
+          }}
+          onPressIn={() => {
+            console.log(navigation);
+            navigation.navigate('Home');
           }}>
+          <Icon name="chevron-left" size={18} color="gray" />
           <Text
             style={{
-              color: 'white',
-              paddingTop: 40,
-              fontSize: 18,
+              color: 'gray',
               fontWeight: 'bold',
+              fontSize: 15,
+              paddingLeft: 8,
             }}>
-            {mention}
+            返回
           </Text>
-          <Icon
-            name="scan-helper"
-            size={Dimensions.get('window').width * 0.9}
-            color="white"
-          />
-        </View>
-        <View
-          style={{
-            flex: 0,
-            height: '30%',
-            justifyContent: 'center',
-          }}>
-          <TouchableOpacity onPressIn={takePicture} style={styles.capture}>
-            <Icon name="camera" size={50} color="white" />
-          </TouchableOpacity>
-        </View>
-      </RNCamera>
-    </View>
+        </TouchableOpacity>
+        <VStack space={4} alignItems="center">
+          <Heading textAlign="center" mt="20" mb="10">
+            {`历史提交：${history.length} 次`}
+          </Heading>
+          {history.map(({elecid, time}, index) => {
+            const formatTime = time.split('.')[0].replace('T', ' ');
+            const color = index % 2 === 0 ? 'info.50' : 'muted.50';
+            return (
+              <Center
+                key={index}
+                w="85%"
+                h="100px"
+                bg={color}
+                rounded="md"
+                shadow={3}>
+                <View
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                  }}>
+                  <Text
+                    style={{
+                      padding: 10,
+                      paddingBottom: 0,
+                      fontWeight: 'bold',
+                    }}>
+                    {formatTime}
+                  </Text>
+                  <Text
+                    style={{
+                      padding: 10,
+                    }}>{`电表编号：${elecid}`}</Text>
+                </View>
+              </Center>
+            );
+          })}
+          <View style={{height: 15}} />
+        </VStack>
+      </ScrollView>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    backgroundColor: 'black',
-    marginTop: '15%',
-    height: 120,
-    width: 120,
-    borderRadius: 120,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    paddingTop: 15,
-    paddingBottom: 20,
-    opacity: 0.8,
-  },
-});
-
-export default MCamera;

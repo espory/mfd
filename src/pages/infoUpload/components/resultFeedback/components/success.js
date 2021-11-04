@@ -15,7 +15,7 @@ export function Success(props) {
           style={styles.secondaryButton}
           title="登录"
           onPressIn={() => {
-            alert('功能待完善');
+            navigation.navigate('History');
             // toast.show({
             //   title: '登录成功',
             //   status: 'success',

@@ -38,7 +38,10 @@ const Home = props => {
               }}>
               <Icon name="user" size={40} color="gray" />
             </TouchableOpacity>
-            <TouchableOpacity onPressIn={() => {}}>
+            <TouchableOpacity
+              onPressIn={() => {
+                navigation.navigate('History');
+              }}>
               <Icon name="th-list" size={40} color="gray" />
             </TouchableOpacity>
           </View>

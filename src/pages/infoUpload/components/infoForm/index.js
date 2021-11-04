@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Dimensions,
+  Alert,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {useDisclose} from 'native-base';
@@ -20,7 +21,7 @@ import GetGeolocation from './components/getGeolocation';
 import InfoComplete from './components/infoComplete';
 import ShowHelp from './components/showHelp';
 import ShowAction from './components/showAction';
-import {postSubmit} from '../../../../service/index';
+import {postSubmit, postEidSearch} from '../../../../service/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const pickType = {
   InDevice: 'InDevice',
@@ -143,19 +144,6 @@ export default function InfoForm(props) {
             <TouchableOpacity
               style={styles.mainButton}
               onPressIn={async () => {
-                if (!deviceInImgUrl || !deviceOutImgUrl) {
-                  toast.show({
-                    title: '设备照片为空',
-                    status: 'warning',
-                    placement: 'top',
-                    duration: 1500,
-                    isClosable: false,
-                    style: {
-                      width: 180,
-                    },
-                  });
-                  return;
-                }
                 if (!deviceCode.value) {
                   toast.show({
                     title: '设备编码为空',
@@ -169,10 +157,48 @@ export default function InfoForm(props) {
                   });
                   return;
                 }
+                const deviceInfo = await postEidSearch(deviceCode.value);
+                if (deviceInfo.code === 201) {
+                  const {username: us} = deviceInfo.data;
+                  if (us !== username) {
+                    Alert.alert(
+                      '提交失败',
+                      `该电表已被用户名为 ${us} 的用户提交过，请选择其他电表`,
+                      [
+                        {
+                          text: '取消',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: '返回主页',
+                          onPress: () => {
+                            navigation.navigate('Home');
+                          },
+                        },
+                      ],
+                    );
+                    return;
+                  }
+                }
+                const username = await AsyncStorage.getItem('username');
+                console.log(deviceInfo);
+                if (!deviceInImgUrl || !deviceOutImgUrl) {
+                  toast.show({
+                    title: '设备照片为空',
+                    status: 'warning',
+                    placement: 'top',
+                    duration: 1500,
+                    isClosable: false,
+                    style: {
+                      width: 180,
+                    },
+                  });
+                  return;
+                }
                 setloading(true);
                 const token = await AsyncStorage.getItem('token');
                 // const worker = await AsyncStorage.getItem('worker');
-                const username = await AsyncStorage.getItem('username');
 
                 const res = await postSubmit({
                   // worker,

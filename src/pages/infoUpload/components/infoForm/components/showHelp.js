@@ -31,9 +31,18 @@ function ShowHelp(props) {
                 fontSize: 12,
                 fontWeight: 'bold',
                 color: 'brown',
-                paddingBottom: 10,
+                paddingBottom: 6,
               }}>
               照片拍摄时, 请尽量保证清晰, 避免出现反光
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: 'bold',
+                color: 'brown',
+                paddingBottom: 10,
+              }}>
+              正面拍摄、角度不要倾斜、拍摄完整不要有缺漏
             </Text>
             <View
               style={{
@@ -62,9 +71,18 @@ function ShowHelp(props) {
                 fontSize: 12,
                 fontWeight: 'bold',
                 color: 'brown',
-                paddingBottom: 10,
+                paddingBottom: 6,
               }}>
               照片拍摄时, 请尽量保证清晰, 避免出现反光
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: 'bold',
+                color: 'brown',
+                paddingBottom: 10,
+              }}>
+              正面拍摄、角度不要倾斜、拍摄完整不要有缺漏
             </Text>
             <View
               style={{

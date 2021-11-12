@@ -44,7 +44,7 @@ export default function InfoForm(props) {
   const [textAreaValue, setTextAreaValue] = useState('');
   const [pickImgType, setpickImgType] = useState(null); // getDevicePhoto or getDeviceCode
   const {isOpen, onOpen, onClose} = useDisclose();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [loading, setloading] = useState(false);
   useEffect(() => {
     return () => {};

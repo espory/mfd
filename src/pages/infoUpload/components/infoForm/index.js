@@ -16,6 +16,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useDisclose} from 'native-base';
 import GetDeviceCode from './components/getDeviceCode';
 import GetDevicePhoto from './components/getDevicePhoto';
+import GetDeviceNeg from './components/getDeviceNeg';
 import GetGeolocation from './components/getGeolocation';
 
 import InfoComplete from './components/infoComplete';
@@ -37,6 +38,8 @@ export default function InfoForm(props) {
   const {setpage, PAGE_MAP, navigation, toast} = props;
   const [deviceInImgUrl, setdeviceInImgUrl] = useState({});
   const [deviceOutImgUrl, setdeviceOutImgUrl] = useState({});
+  const [devicePosImgUrl, setdevicePosImgUrl] = useState({});
+  const [deviceNegImgUrls, setdeviceNegImgUrls] = useState([]);
   const [deviceCode, setdeviceCode] = useState({
     type: deviceCodeType.ShowIcon,
     value: '',
@@ -56,6 +59,12 @@ export default function InfoForm(props) {
     },
     OutDevice: obj => {
       setdeviceOutImgUrl(obj);
+    },
+    PosDevice: obj => {
+      setdevicePosImgUrl(obj);
+    },
+    NegDevice: obj => {
+      setdeviceNegImgUrls(obj);
     },
   };
 
@@ -100,15 +109,19 @@ export default function InfoForm(props) {
               setShowModal={setShowModal}
               deviceInImgUrl={deviceInImgUrl?.url}
               deviceOutImgUrl={deviceOutImgUrl?.url}
+              devicePosImgUrl={devicePosImgUrl?.url}
               setpickInImg={() => {
                 setpickImgType(pickType.InDevice);
               }}
               setpickOutImg={() => {
                 setpickImgType(pickType.OutDevice);
               }}
+              setpickPosImg={() => {
+                setpickImgType(pickType.PosDevice);
+              }}
             />
             <GetDeviceCode
-              title={'设备编码上传'}
+              title={'定位编码上传'}
               onOpen={onOpen}
               deviceCode={deviceCode}
               setCodeText={text => {
@@ -122,6 +135,27 @@ export default function InfoForm(props) {
                   type: deviceCodeType.ShowIcon,
                   value: '',
                 });
+              }}
+            />
+            <GetDeviceNeg
+              title={'设备照片上传'}
+              onOpen={onOpen}
+              setShowModal={setShowModal}
+              deviceNegImgUrls={deviceNegImgUrls}
+              deviceInImgUrl={deviceInImgUrl?.url}
+              deviceOutImgUrl={deviceOutImgUrl?.url}
+              devicePosImgUrl={devicePosImgUrl?.url}
+              setpickInImg={() => {
+                setpickImgType(pickType.InDevice);
+              }}
+              setpickOutImg={() => {
+                setpickImgType(pickType.OutDevice);
+              }}
+              setpickPosImg={() => {
+                setpickImgType(pickType.PosDevice);
+              }}
+              setpickNegImg={() => {
+                setpickImgType(pickType.NegDevice);
               }}
             />
             <GetGeolocation title={'地理位置'} toast={toast} />

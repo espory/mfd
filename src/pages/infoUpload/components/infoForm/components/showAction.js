@@ -19,6 +19,108 @@ function ShowAction(props) {
     setloading,
   } = props;
   const actionStrategy = {
+    [pickType.NegDevice]: {
+      item1: {
+        itemTitle: '拍照',
+        itemIcon: <Icon name="camera" size={30} color="black" />,
+        onClick: () => {
+          setImage[pickImgType]({});
+          // setshowCamera(true);
+          navigation.navigate('Camera', {
+            mention: '请将表箱置于标注框内',
+            setdeviceImgUrl: obj => {
+              const {url, upload_url} = obj;
+              setImage[pickImgType]({url, upload_url});
+            },
+            isCorrectImg: isCorrectImg(1),
+            toast: toast,
+          });
+          onClose();
+        },
+      },
+      item2: {
+        itemTitle: '从相册中选取',
+        itemIcon: <Icon name="image" size={30} color="black" />,
+        onClick: () => {
+          onClose();
+          launchImageLibrary({}, async res => {
+            if (!res.assets) {
+              return;
+            }
+            setloading(true);
+            const uri = res?.assets?.length && res.assets[0].uri;
+            const rs = await isCorrectImg(1)(uri);
+            console.log(rs);
+            if (rs.code === 201) {
+              setImage[pickImgType]({url: uri, upload_url: rs.data});
+            } else {
+              toast.show({
+                title: '照片拍摄不合规，请重新选择',
+                status: 'error',
+                placement: 'top',
+                duration: 3000,
+                isClosable: false,
+                style: {
+                  width: 240,
+                },
+              });
+            }
+            setloading(false);
+          });
+        },
+      },
+    },
+    [pickType.PosDevice]: {
+      item1: {
+        itemTitle: '拍照',
+        itemIcon: <Icon name="camera" size={30} color="black" />,
+        onClick: () => {
+          setImage[pickImgType]({});
+          // setshowCamera(true);
+          navigation.navigate('Camera', {
+            mention: '请将表箱置于标注框内',
+            setdeviceImgUrl: obj => {
+              const {url, upload_url} = obj;
+              setImage[pickImgType]({url, upload_url});
+            },
+            isCorrectImg: isCorrectImg(1),
+            toast: toast,
+          });
+          onClose();
+        },
+      },
+      item2: {
+        itemTitle: '从相册中选取',
+        itemIcon: <Icon name="image" size={30} color="black" />,
+        onClick: () => {
+          onClose();
+          launchImageLibrary({}, async res => {
+            if (!res.assets) {
+              return;
+            }
+            setloading(true);
+            const uri = res?.assets?.length && res.assets[0].uri;
+            const rs = await isCorrectImg(1)(uri);
+            console.log(rs);
+            if (rs.code === 201) {
+              setImage[pickImgType]({url: uri, upload_url: rs.data});
+            } else {
+              toast.show({
+                title: '照片拍摄不合规，请重新选择',
+                status: 'error',
+                placement: 'top',
+                duration: 3000,
+                isClosable: false,
+                style: {
+                  width: 240,
+                },
+              });
+            }
+            setloading(false);
+          });
+        },
+      },
+    },
     [pickType.OutDevice]: {
       item1: {
         itemTitle: '拍照',

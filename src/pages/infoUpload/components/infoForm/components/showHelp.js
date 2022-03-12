@@ -1,6 +1,7 @@
-import React from 'react';
+import React from 'react'; // , {useEffect, useState}
 import {Image, View, Text} from 'react-native';
-import {Button, Modal} from 'native-base';
+import {Modal} from 'native-base';
+// import axios from 'axios';
 
 const STANDARD_IN = require('../../../../../public/image/standard_in.jpg');
 const STANDARD_OUT = require('../../../../../public/image/standard_out.jpg');
@@ -129,17 +130,7 @@ function ShowHelp(props) {
               />
             </View>
           </Modal.Body>
-          <Modal.Footer>
-            {/* <Button.Group variant="ghost" space={2}>
-              <Button>LEARN MORE</Button>
-              <Button
-                onPressIn={() => {
-                  setShowModal(false);
-                }}>
-                ACCEPT
-              </Button>
-            </Button.Group> */}
-          </Modal.Footer>
+          <Modal.Footer />
         </Modal.Content>
       </Modal>
     </>

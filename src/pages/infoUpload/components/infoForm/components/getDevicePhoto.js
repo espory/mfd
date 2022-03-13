@@ -9,7 +9,7 @@ import {
 import {Image} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-export default function getDevicePhoto(props) {
+export default function GetDevicePhoto(props) {
   const {
     title,
     onOpen,

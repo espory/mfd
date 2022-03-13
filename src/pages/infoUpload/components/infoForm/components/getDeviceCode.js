@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import {deviceCodeType} from '../index';
 
-export default function getDeviceCode(props) {
+export default function GetDeviceCode(props) {
   const {title, onOpen, deviceCode, setpickCodeImg, setCodeText, initCodeType} =
     props;
   return (

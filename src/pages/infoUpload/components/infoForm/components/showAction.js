@@ -13,9 +13,11 @@ function ShowAction(props) {
     pickImgType,
     launchImageLibrary,
     setImage,
+    deviceNegInfo,
     setdeviceCode,
     toast,
     navigation,
+    negId,
     setloading,
   } = props;
   const actionStrategy = {
@@ -24,13 +26,20 @@ function ShowAction(props) {
         itemTitle: '拍照',
         itemIcon: <Icon name="camera" size={30} color="black" />,
         onClick: () => {
-          setImage[pickImgType]({});
+          // setImage[pickImgType]({});
           // setshowCamera(true);
           navigation.navigate('Camera', {
             mention: '请将表箱置于标注框内',
             setdeviceImgUrl: obj => {
               const {url, upload_url} = obj;
-              setImage[pickImgType]({url, upload_url});
+              if (negId !== undefined) {
+                deviceNegInfo[negId] = {
+                  ...deviceNegInfo[negId],
+                  url,
+                  upload_url,
+                };
+                setImage[pickImgType]([...deviceNegInfo]);
+              }
             },
             isCorrectImg: isCorrectImg(1),
             toast: toast,

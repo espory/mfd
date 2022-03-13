@@ -39,13 +39,14 @@ export default function InfoForm(props) {
   const [deviceInImgUrl, setdeviceInImgUrl] = useState({});
   const [deviceOutImgUrl, setdeviceOutImgUrl] = useState({});
   const [devicePosImgUrl, setdevicePosImgUrl] = useState({});
-  const [deviceNegImgUrls, setdeviceNegImgUrls] = useState([]);
+  const [deviceNegInfo, setdeviceNegInfo] = useState([]);
   const [deviceCode, setdeviceCode] = useState({
     type: deviceCodeType.ShowIcon,
     value: '',
   });
   const [textAreaValue, setTextAreaValue] = useState('');
   const [pickImgType, setpickImgType] = useState(null); // getDevicePhoto or getDeviceCode
+  const [negId, setnegId] = useState(null); // getDevicePhoto or getDeviceCode
   const {isOpen, onOpen, onClose} = useDisclose();
   const [showModal, setShowModal] = useState(true);
   const [loading, setloading] = useState(false);
@@ -64,7 +65,7 @@ export default function InfoForm(props) {
       setdevicePosImgUrl(obj);
     },
     NegDevice: obj => {
-      setdeviceNegImgUrls(obj);
+      setdeviceNegInfo(obj);
     },
   };
 
@@ -138,10 +139,12 @@ export default function InfoForm(props) {
               }}
             />
             <GetDeviceNeg
-              title={'设备照片上传'}
+              title={'故障照片上传'}
               onOpen={onOpen}
+              setnegId={setnegId}
               setShowModal={setShowModal}
-              deviceNegImgUrls={deviceNegImgUrls}
+              setdeviceNegInfo ={setdeviceNegInfo}
+              deviceNegInfo={deviceNegInfo}
               deviceInImgUrl={deviceInImgUrl?.url}
               deviceOutImgUrl={deviceOutImgUrl?.url}
               devicePosImgUrl={devicePosImgUrl?.url}
@@ -295,7 +298,9 @@ export default function InfoForm(props) {
         isOpen={isOpen}
         onClose={onClose}
         pickImgType={pickImgType}
+        negId={negId}
         launchImageLibrary={launchImageLibrary}
+        deviceNegInfo={deviceNegInfo}
         setImage={setImage}
         setdeviceCode={setdeviceCode}
         navigation={navigation}

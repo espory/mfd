@@ -10,13 +10,18 @@ export default function History(props) {
   const [history, sethistory] = useState([]);
   useEffect(() => {
     AsyncStorage.getItem('username').then(async username => {
-      const res = await postUidSearch(username);
-      if (res.code === 205) {
-        sethistory([]);
-        return;
+      try {
+        const res = await postUidSearch(username);
+        console.log(res);
+        if (res.code === 205) {
+          sethistory([]);
+          return;
+        }
+        sethistory(res?.data || []);
+        // postUidSearch
+      } catch (error) {
+        console.error(error);
       }
-      sethistory(res?.data || []);
-      // postUidSearch
     });
 
     return () => {};

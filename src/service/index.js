@@ -109,9 +109,9 @@ export function postEidSearch(eid) {
     ElecID: eid,
   };
   return fetch({
-    url: '/eidsearch/eidsearch',
+    url: '/search/eidsearch',
     method: 'post',
-    params: data,
+    data: data,
   });
 }
 export function postUidSearch(uid) {
@@ -119,8 +119,8 @@ export function postUidSearch(uid) {
     UserID: uid,
   };
   return fetch({
-    url: '/uidsearch/uidsearch',
+    url: '/search/uidsearch',
     method: 'post',
-    params: data,
+    data: data,
   });
 }

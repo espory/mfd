@@ -44,26 +44,6 @@ const multiSelectIcons = {
   },
 };
 const errorTypes = [
-  // {label: '其他', value: '其他'},
-  // {label: '表箱锁坏', value: '表箱锁坏'},
-  // {label: '表箱门坏', value: '表箱门坏'},
-  // {label: '表箱倾斜', value: '表箱倾斜'},
-  // {label: '表箱无箱盖', value: '表箱无箱盖'},
-  // {label: '表箱无资产编号', value: '表箱无资产编号'},
-  // {label: '表黑屏', value: '表黑屏'},
-  // {label: '表未固定', value: '表未固定'},
-  // {label: '表无电', value: '表无电'},
-  // {label: '表无封印', value: '表无封印'},
-  // {
-  //   name: '其他',
-  //   id: 9,
-  //   children: [
-  //     {
-  //       name: '手动填写补充',
-  //       id: 999,
-  //     },
-  //   ],
-  // },
   {
     name: '表箱问题',
     id: 1,
@@ -92,7 +72,7 @@ const errorTypes = [
     ],
   },
   {
-    name: '表箱问题',
+    name: '电表问题',
     id: 2,
     // these are the children or 'sub items'
     children: [
@@ -116,11 +96,26 @@ const errorTypes = [
   },
 ];
 
+const errorHash = {
+  100: '表箱锁坏',
+  101: '表箱门坏',
+  102: '表箱倾斜',
+  103: '表箱无箱盖',
+  104: '表箱无资产编号',
+  200: '表黑屏',
+  201: '表未固定',
+  202: '表无电',
+  203: '表无封印',
+};
+const errorHashT = {};
+for (let k in errorHash) {
+  errorHashT[errorHash[k]] = Number(k);
+}
+
 export default function GetDeviceNeg(props) {
   const {
     title,
     onOpen,
-    deviceOutImgUrl,
     setpickNegImg,
     setnegId,
     deviceNegInfo,
@@ -201,11 +196,11 @@ export default function GetDeviceNeg(props) {
                   showDropDowns={false}
                   readOnlyHeadings={true}
                   onSelectedItemsChange={e => {
-                    deviceNegInfo[index].info = e;
+                    deviceNegInfo[index].info = e.map(id => errorHash[id]);
                     setdeviceNegInfo([...deviceNegInfo]);
-                    console.log(e);
+                    console.log(deviceNegInfo[index].info);
                   }}
-                  selectedItems={info}
+                  selectedItems={info.map(error => errorHashT[error])}
                 />
               </View>
               {/* <Select

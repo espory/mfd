@@ -59,9 +59,15 @@ function ShowAction(props) {
             setloading(true);
             const uri = res?.assets?.length && res.assets[0].uri;
             const rs = await isCorrectImg(1)(uri);
-            console.log(rs);
             if (rs.code === 201) {
-              setImage[pickImgType]({url: uri, upload_url: rs.data});
+              if (negId !== undefined) {
+                deviceNegInfo[negId] = {
+                  ...deviceNegInfo[negId],
+                  url: uri,
+                  upload_url: rs.data,
+                };
+                setImage[pickImgType]([...deviceNegInfo]);
+              }
             } else {
               toast.show({
                 title: '照片拍摄不合规，请重新选择',

@@ -120,7 +120,7 @@ export default function GetDevicePhoto(props) {
             setpickPosImg();
             onOpen();
           }}>
-          {deviceInImgUrl ? (
+          {devicePosImgUrl ? (
             <Image
               source={{uri: devicePosImgUrl}}
               style={styles.image}

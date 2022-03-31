@@ -27,6 +27,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const pickType = {
   InDevice: 'InDevice',
   OutDevice: 'OutDevice',
+  PosDevice: 'PosDevice',
+  NegDevice: 'NegDevice',
   BarCode: 'BarCode',
 };
 export const deviceCodeType = {
@@ -143,7 +145,7 @@ export default function InfoForm(props) {
               onOpen={onOpen}
               setnegId={setnegId}
               setShowModal={setShowModal}
-              setdeviceNegInfo ={setdeviceNegInfo}
+              setdeviceNegInfo={setdeviceNegInfo}
               deviceNegInfo={deviceNegInfo}
               deviceInImgUrl={deviceInImgUrl?.url}
               deviceOutImgUrl={deviceOutImgUrl?.url}
@@ -174,13 +176,15 @@ export default function InfoForm(props) {
             <TouchableOpacity
               style={styles.secondaryButton}
               onPressIn={() => {
-                navigation.navigate('Home');
+                console.log(deviceNegInfo);
+                // navigation.navigate('Home');
               }}>
               <Text style={{color: '#88afd5'}}>返回</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.mainButton}
               onPressIn={async () => {
+                // console.log(deviceNegInfo);
                 if (!deviceCode.value) {
                   toast.show({
                     title: '设备编码为空',
@@ -219,7 +223,6 @@ export default function InfoForm(props) {
                   }
                 }
                 const username = await AsyncStorage.getItem('username');
-                console.log(deviceInfo);
                 if (!deviceInImgUrl || !deviceOutImgUrl) {
                   toast.show({
                     title: '设备照片为空',
@@ -237,14 +240,52 @@ export default function InfoForm(props) {
                 const token = await AsyncStorage.getItem('token');
                 // const worker = await AsyncStorage.getItem('worker');
 
+                // const res = await postSubmit({
+                //   // worker,
+                //   elecid: deviceCode.value,
+                //   information: textAreaValue,
+                //   token,
+                //   username,
+                //   file1: deviceInImgUrl.upload_url,
+                //   file2: deviceOutImgUrl.upload_url,
+                // });
+
+                const file1_ = [
+                  {path: deviceInImgUrl.upload_url, info: [], code: ''},
+                  {path: deviceOutImgUrl.upload_url, info: [], code: ''},
+                  {
+                    path: devicePosImgUrl.upload_url,
+                    info: [],
+                    code: deviceCode.value,
+                  },
+                ];
+                const file2_ = deviceNegInfo
+                  .filter(item => {
+                    return Boolean(
+                      item.upload_url && (item.info?.length || item.extra),
+                    );
+                  })
+                  .map(item => {
+                    const {upload_url, info, extra} = item;
+                    if (extra) {
+                      info.push(extra);
+                    }
+                    return {
+                      path: upload_url,
+                      info,
+                      code: '',
+                    };
+                  });
+
+                // [{"extra": "", "id": "pr085hhcmb", "info": ["表无电", "表黑屏", "表箱倾斜"], "url": null}, {"extra": "", "id": "e8niow1g6ps", "info": [], "url": null}, {"extra": "", "id": "vyuvk656fhg", "info": [], "url": null}]
                 const res = await postSubmit({
                   // worker,
                   elecid: deviceCode.value,
                   information: textAreaValue,
                   token,
                   username,
-                  file1: deviceInImgUrl.upload_url,
-                  file2: deviceOutImgUrl.upload_url,
+                  file1: JSON.stringify(file1_),
+                  file2: JSON.stringify(file2_),
                 });
                 setloading(false);
                 //token无效

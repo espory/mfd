@@ -16,11 +16,10 @@ export function Error(props) {
     <View style={{flex: 1}}>
       <View style={styles.headerView}>
         <Icon name="exclamation-triangle" size={70} color="#faa755" />
-        <Text style={styles.mentionText}>电表/接线，存在问题</Text>
-        <Text style={styles.errorText}>
-          电表第一根接线和第二根出现错位， 问题图片如下：
-        </Text>
-        <TouchableOpacity
+        <Text style={styles.mentionText}>存在问题</Text>
+        <Text style={styles.errorText}>倾斜角度为5.1°，安装高度为1.6米</Text>
+        <Text style={styles.errorText}>封印缺失、表箱盖无锁</Text>
+        {/* <TouchableOpacity
           onPressIn={() => {
             setshowImage(true);
           }}>
@@ -34,7 +33,7 @@ export function Error(props) {
               uri: 'https://www.w3schools.com/css/img_lights.jpg',
             }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={styles.buttonView}>
         <TouchableOpacity
@@ -46,9 +45,9 @@ export function Error(props) {
             //   placement: 'top',
             //   isClosable: false,
             // });
-            navigation.pop();
+            setpage(PAGE_MAP.RESULT_FEEDBACK);
           }}>
-          <Text style={{color: '#88afd5'}}>放弃提交</Text>
+          <Text style={{color: '#88afd5'}}>问题反馈</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.mainButton}
@@ -61,7 +60,7 @@ export function Error(props) {
             // });
             setpage(PAGE_MAP.INFO);
           }}>
-          <Text style={{color: 'white'}}>前去修改</Text>
+          <Text style={{color: 'white'}}>确定</Text>
         </TouchableOpacity>
       </View>
       <Modal
@@ -117,6 +116,7 @@ const styles = StyleSheet.create({
     width: '63%',
     fontSize: 14,
     paddingTop: 20,
+    textAlign: 'center',
   },
   image: {
     marginTop: 20,

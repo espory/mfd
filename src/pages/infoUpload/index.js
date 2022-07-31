@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {View} from 'react-native';
-import {Success, Error} from './components/resultFeedback/index';
+import {Success, Error, Feedback} from './components/resultFeedback/index';
 import InfoForm from './components/infoForm';
 import {PAGE_MAP} from '../../common/utils';
 import {ToastContext} from '../../index';
@@ -19,6 +19,9 @@ function InfoUpload(props) {
       break;
     case PAGE_MAP.RESULT_ERROR:
       ShowComponent = Error;
+      break;
+    case PAGE_MAP.RESULT_FEEDBACK:
+      ShowComponent = Feedback;
       break;
     default:
       break;

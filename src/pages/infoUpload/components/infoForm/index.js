@@ -157,32 +157,32 @@ export default function InfoForm(props) {
                   });
                   return;
                 }
-                const deviceInfo = await postEidSearch(deviceCode.value);
-                if (deviceInfo.code === 201) {
-                  const {username: us} = deviceInfo.data;
-                  if (us !== username) {
-                    Alert.alert(
-                      '提交失败',
-                      `该电表已被用户名为 ${us} 的用户提交过，请选择其他电表`,
-                      [
-                        {
-                          text: '取消',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
-                        },
-                        {
-                          text: '返回主页',
-                          onPress: () => {
-                            navigation.navigate('Home');
-                          },
-                        },
-                      ],
-                    );
-                    return;
-                  }
-                }
+                // const deviceInfo = await postEidSearch(deviceCode.value);
+                // if (deviceInfo.code === 201) {
+                //   const {username: us} = deviceInfo.data;
+                //   if (us !== username) {
+                //     Alert.alert(
+                //       '提交失败',
+                //       `该电表已被用户名为 ${us} 的用户提交过，请选择其他电表`,
+                //       [
+                //         {
+                //           text: '取消',
+                //           onPress: () => console.log('Cancel Pressed'),
+                //           style: 'cancel',
+                //         },
+                //         {
+                //           text: '返回主页',
+                //           onPress: () => {
+                //             navigation.navigate('Home');
+                //           },
+                //         },
+                //       ],
+                //     );
+                //     return;
+                //   }
+                // }
                 const username = await AsyncStorage.getItem('username');
-                console.log(deviceInfo);
+                // console.log(deviceInfo);
                 if (!deviceInImgUrl || !deviceOutImgUrl) {
                   toast.show({
                     title: '设备照片为空',
@@ -200,45 +200,50 @@ export default function InfoForm(props) {
                 const token = await AsyncStorage.getItem('token');
                 // const worker = await AsyncStorage.getItem('worker');
 
-                const res = await postSubmit({
-                  // worker,
-                  elecid: deviceCode.value,
-                  information: textAreaValue,
-                  token,
-                  username,
-                  file1: deviceInImgUrl.upload_url,
-                  file2: deviceOutImgUrl.upload_url,
+                // const res = await postSubmit({
+                //   // worker,
+                //   elecid: deviceCode.value,
+                //   information: textAreaValue,
+                //   token,
+                //   username,
+                //   file1: deviceInImgUrl.upload_url,
+                //   file2: deviceOutImgUrl.upload_url,
+                // });
+                const res = await new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve({code: 200, msg: '安装失败'});
+                  }, 1000);
                 });
                 setloading(false);
                 //token无效
-                if (res.code === 101) {
-                  await AsyncStorage.removeItem('token');
-                  toast.show({
-                    title: '用户信息已过期，请重新登录',
-                    status: 'warning',
-                    placement: 'top',
-                    isClosable: false,
-                    style: {
-                      width: 340,
-                    },
-                  });
-                  navigation.navigate('Login');
-                }
-                if (res.code === 200) {
-                  // const pgname =
-                  //   Math.floor(Math.random() * 2) === 0
-                  //     ? PAGE_MAP.RESULT_ERROR
-                  //     : PAGE_MAP.RESULT_SUCCESS;
-                  setpage(PAGE_MAP.RESULT_SUCCESS);
-                }
+                // if (res.code === 101) {
+                //   await AsyncStorage.removeItem('token');
+                //   toast.show({
+                //     title: '用户信息已过期，请重新登录',
+                //     status: 'warning',
+                //     placement: 'top',
+                //     isClosable: false,
+                //     style: {
+                //       width: 340,
+                //     },
+                //   });
+                //   navigation.navigate('Login');
+                // }
+                // if (res.code === 200) {
+                //   // const pgname =
+                //   //   Math.floor(Math.random() * 2) === 0
+                //   //     ? PAGE_MAP.RESULT_ERROR
+                //   //     : PAGE_MAP.RESULT_SUCCESS;
+                //   setpage(PAGE_MAP.RESULT_SUCCESS);
+                // }
                 // if (res.code === 200 && res.msg === '安装成功') {
                 //   setpage(PAGE_MAP.RESULT_SUCCESS);
                 //   return;
                 // }
-                // if (res.code === 200 && res.msg === '安装失败') {
-                //   setpage(PAGE_MAP.RESULT_ERROR);
-                //   return;
-                // }
+                if (res.code === 200 && res.msg === '安装失败') {
+                  setpage(PAGE_MAP.RESULT_ERROR);
+                  return;
+                }
                 // toast.show({
                 //   title: '登录成功',
                 //   status: 'success',
